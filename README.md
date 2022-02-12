@@ -109,6 +109,9 @@ currently parked with a for sale notice.
 Returns boolean value indicating if the URL is
 associated with malicious phishing behavior.
 
+#### print()
+Output a limited amount of fields to standard output.
+
 #### request_id()
 Returns a string representing the unique identifier for this request
 that can be used to lookup the request details or send a postback

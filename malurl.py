@@ -40,6 +40,33 @@ class MalURL:
         response = requests.get(api_url)
         self.results = json.loads(response.content.decode('utf-8'))
 
+    def print(self):
+        """
+        Output a limited amount of fields to standard output.
+
+        Parameters
+        ----------
+        None.
+        """
+        domain = self.domain()
+        print(domain)
+        print('-' * len(domain))
+
+        if not self.success():
+            print(f'message: {self.message()}')
+            print(f'status:  {self.status_code()}')
+            return
+
+        print(f'IP Address: {self.ip_address()}')
+        print(f'Category:   {self.category()}')
+        print(f'Adult:      {self.adult()}')
+        print(f'Malware:    {self.malware()}')
+        print(f'Phishing:   {self.phishing()}')
+        print(f'Spamming:   {self.spamming()}')
+        print(f'Suspicious: {self.suspicious()}')
+        print(f'Unsafe:     {self.unsafe()}')
+        print(f'Risk score: {self.risk_score()}')
+
     def write_csv(self, filename):
         """
         Writes the results to a csv file.
