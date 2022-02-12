@@ -67,20 +67,6 @@ class MalURL:
         print(f'Unsafe:     {self.unsafe()}')
         print(f'Risk score: {self.risk_score()}')
 
-    def write_csv(self, filename):
-        """
-        Writes the results to a csv file.
-
-        Parameters
-        ----------
-        filename: string
-        """
-        with open(filename, 'w') as csvfile:
-            field_names = list(self.results.keys())
-            writer = DictWrtier(csvfile, fieldnames=field_names)
-            writer.writeheader()
-            writer.writerows(self.results)
-
     def unsafe(self):
         """
         Returns boolean value indicating if the domain is suspected of
