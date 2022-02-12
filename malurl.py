@@ -3,7 +3,7 @@ __version__ = "1.0.0"
 
 import json
 import requests
-from csv import DictWrtier
+from csv import DictWriter
 from validators import ValidationFailure, url as validate_url
 from urllib.parse import quote_plus
 
