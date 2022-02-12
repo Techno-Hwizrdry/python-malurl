@@ -145,3 +145,6 @@ the risk_score() method as a confidence level.
 Returns boolean value indicating if the domain is suspected of
 being unsafe due to phishing, malware, spamming, or abusive
 behavior. View the confidence level by analyzing the “risk_score”.
+
+#### write_csv()
+Writes the results to a csv file.

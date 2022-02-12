@@ -3,6 +3,7 @@ __version__ = "1.0.0"
 
 import json
 import requests
+from csv import DictWrtier
 from validators import ValidationFailure, url as validate_url
 from urllib.parse import quote_plus
 
@@ -38,6 +39,16 @@ class MalURL:
 
         response = requests.get(api_url)
         self.results = json.loads(response.content.decode('utf-8'))
+
+    def write_csv(self, filename):
+        """
+        Writes the results to a csv file.
+        """
+        with open(filename, 'w') as csvfile:
+            field_names = list(self.results.keys())
+            writer = DictWrtier(csvfile, fieldnames=field_names)
+            writer.writeheader()
+            writer.writerows(self.results)
 
     def unsafe(self):
         """
