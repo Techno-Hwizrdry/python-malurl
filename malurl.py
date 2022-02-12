@@ -43,6 +43,10 @@ class MalURL:
     def write_csv(self, filename):
         """
         Writes the results to a csv file.
+
+        Parameters
+        ----------
+        filename: string
         """
         with open(filename, 'w') as csvfile:
             field_names = list(self.results.keys())
