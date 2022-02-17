@@ -37,11 +37,15 @@ class TestMalURL(unittest.TestCase):
 
     def test_MalURL_fetch_valid_key(self):
         self.malurl.fetch('google')
-        self.assertEqual(self.malurl._get('message'), "Invalid url google")
+        self.assertEqual(self.malurl._get('status_code'), 404)
 
     def test_MalURL_fetch_valid_url(self):
         test = self.malurl.results
         self.assertEqual(200, test['status_code'])
+
+    def test_MalURL_fetch_invalid_url(self):
+        self.malurl.fetch('google')
+        self.assertEqual(404, self.malurl._get('status_code'))
 
     def test_MalURL_unsafe(self):
         self.assertEqual(False, self.malurl.unsafe())
