@@ -1,4 +1,3 @@
-colored
-colour
+rainbowprint-TechnoHwizrdry
 requests
 validators
