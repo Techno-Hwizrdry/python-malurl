@@ -5,6 +5,7 @@ import json
 import requests
 from validators import ValidationFailure, url as validate_url
 from urllib.parse import quote_plus
+from rainbowprint import rprint
 
 DOES_NOT_EXIST = -999
 NA = 'N/A'
@@ -27,45 +28,59 @@ class MalURL:
         url: string
         """
         if not self._is_valid_url(url):
-            self.results = {
-                "success": False,
-                "message": f"Invalid url {url}"
-            }
+            self.results = self._no_results(404, "Invalid url {url}")
             return
 
         BASE = 'https://www.ipqualityscore.com/api/json/url'
         encoded_url = quote_plus(url)
         api_url = f'{BASE}/{self.apikey}/{encoded_url}?{self.strictness}'
 
-        response = requests.get(api_url)
-        self.results = json.loads(response.content.decode('utf-8'))
+        try:
+            response = requests.get(api_url)
+            self.results = json.loads(response.content.decode('utf-8'))
+        except requests.exceptions.ConnectionError:
+            msg = "Failed to establish connection to IP Quality Score API."
+            self.results = self._no_results(503, msg)
 
-    def print(self):
+    def _print(self, text, rainbow):
+        if rainbow:
+            rprint(text, 1)
+        else:
+            print(text)
+
+    def print(self, rainbow=False):
         """
         Output a limited amount of fields to standard output.
 
         Parameters
         ----------
-        None.
+        rainbow: boolean (optional)
         """
         domain = self.domain()
-        print(domain)
-        print('-' * len(domain))
+        header = f'{domain}\n{"-" * len(domain)}' 
 
         if not self.success():
+            print(header)
             print(f'message: {self.message()}')
             print(f'status:  {self.status_code()}')
             return
 
-        print(f'IP Address: {self.ip_address()}')
-        print(f'Category:   {self.category()}')
-        print(f'Adult:      {self.adult()}')
-        print(f'Malware:    {self.malware()}')
-        print(f'Phishing:   {self.phishing()}')
-        print(f'Spamming:   {self.spamming()}')
-        print(f'Suspicious: {self.suspicious()}')
-        print(f'Unsafe:     {self.unsafe()}')
-        print(f'Risk score: {self.risk_score()}')
+        # To color the output in a gradient, and avoid
+        # just having output with different colored lines,
+        # the output string must be built before it is
+        # printed.  As opposed to rprint line by line.
+        output = header
+        output += f'\nIP Address: {self.ip_address()}\n'
+        output += f'Category:   {self.category()}\n'
+        output += f'Adult:      {self.adult()}\n'
+        output += f'Malware:    {self.malware()}\n'
+        output += f'Phishing:   {self.phishing()}\n'
+        output += f'Spamming:   {self.spamming()}\n'
+        output += f'Suspicious: {self.suspicious()}\n'
+        output += f'Unsafe:     {self.unsafe()}\n'
+        output += f'Risk score: {self.risk_score()}'
+
+        self._print(output, rainbow)
 
     def unsafe(self):
         """
@@ -331,7 +346,6 @@ class MalURL:
         errs = self._get('errors')
         return errs if errs else []
 
-
     def _get(self, key):
         return self.results[key] if key in self.results else ''
 
@@ -342,3 +356,10 @@ class MalURL:
             return False
 
         return is_valid
+
+    def _no_results(self, status_code, message):
+        return {
+            "success": False,
+            "message": message,
+            "status_code": status_code
+        }
