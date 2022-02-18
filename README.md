@@ -35,6 +35,8 @@ Next, fetch the data of the desired URL from IP Quality Score API:
 
 To conserve the amount of calls made to the API, the results (if any) will be stored within the MalURL object.  After that, the following methods can be called to retrieve the data was obtained from the API call.
 
+## Methods
+
 #### \__init__(apikey: str, strictness: int = 0)
 Constructor for MalURL object.
 
