@@ -8,11 +8,13 @@ These prerequisites can be installed on a Debian based linux machine, like so:
 
 `sudo apt-get install python3 python3-pip`
 
-This module uses the python modules 'requests' and 'validators'.  To install them:
-
-`pip3 install -r requirements.txt`
-
 You will also need an API key from IP Quality Score to use this module.  You can sign up for one [here.](https://www.ipqualityscore.com/create-account)
+
+## Installing
+
+Via Python pip:
+
+`pip install malurl`
 
 ## Usage
 Import the MalURL object, like so:
