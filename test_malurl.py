@@ -3,9 +3,7 @@
 import unittest
 from configparser import ConfigParser
 from urllib.parse import quote_plus
-from malurl import MalURL, DOES_NOT_EXIST
-
-NA = 'N/A'
+from malurl import MalURL, DOES_NOT_EXIST, NA
 
 class TestMalURL(unittest.TestCase):
     def setUp(self):
