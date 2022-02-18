@@ -35,6 +35,9 @@ Next, fetch the data of the desired URL from IP Quality Score API:
 
 To conserve the amount of calls made to the API, the results (if any) will be stored within the MalURL object.  After that, the following methods can be called to retrieve the data was obtained from the API call.
 
+#### \__init__(apikey: str, strictness: int = 0)
+Constructor for MalURL object.
+
 #### adult()
 Returns boolean value indicating if the URL or
 domain is hosting dating or adult content.
@@ -74,20 +77,16 @@ traffic.  Returns DOES_NOT_EXIST if unreachable.
 Returns a list of strings representing the errors which
 occurred while attempting to process this request.
 
-#### fetch(url)
+#### fetch(url: str)
 Sets self.results to a dictionary representing the JSON response
 from IP Quality Score.  The url parameter will be validated
 before a request to IP Quality Score is made.  This is done
 to conserve our monthly request limit, in case url is invalid.
 
-url: string
-
-
 #### ip_address()
 Returns a string representing the IP address
 corresponding to the server of the domain name.
 Returns an empty string if ‘ip_address’ is not available.
-
 
 #### malware()
 Returns boolean value indicating if the URL is
@@ -109,7 +108,7 @@ currently parked with a for sale notice.
 Returns boolean value indicating if the URL is
 associated with malicious phishing behavior.
 
-#### print()
+#### print(rainbow: bool = False)
 Output a limited amount of fields to standard output.
 
 #### request_id()
