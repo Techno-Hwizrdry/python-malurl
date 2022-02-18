@@ -3,6 +3,7 @@ __version__ = "1.0.0"
 
 import json
 import requests
+from typing import Dict, List
 from validators import ValidationFailure, url as validate_url
 from urllib.parse import quote_plus
 from rainbowprint import rprint
@@ -11,12 +12,12 @@ DOES_NOT_EXIST = -999
 NA = 'N/A'
 
 class MalURL:
-    def __init__(self, apikey, strictness=0):
+    def __init__(self, apikey: str, strictness: int=0) -> None:
         self.apikey = apikey
         self.strictness = strictness
         self.results = {}
 
-    def fetch(self, url):
+    def fetch(self, url: str) -> None:
         """
         Sets self.results to a dictionary representing the JSON response
         from IP Quality Score.  The url parameter will be validated
@@ -42,13 +43,13 @@ class MalURL:
             msg = "Failed to establish connection to IP Quality Score API."
             self.results = self._no_results(503, msg)
 
-    def _print(self, text, rainbow):
+    def _print(self, text: str, rainbow: bool) -> None:
         if rainbow:
             rprint(text, 1)
         else:
             print(text)
 
-    def print(self, rainbow=False):
+    def print(self, rainbow: bool=False) -> None:
         """
         Output a limited amount of fields to standard output.
 
@@ -82,7 +83,7 @@ class MalURL:
 
         self._print(output, rainbow)
 
-    def unsafe(self):
+    def unsafe(self) -> bool:
         """
         Returns boolean value indicating if the domain is suspected of
         being unsafe due to phishing, malware, spamming, or abusive
@@ -94,7 +95,7 @@ class MalURL:
         """
         return bool(self._get('unsafe'))
 
-    def domain(self):
+    def domain(self) -> str:
         """
         Returns a string representing the domain name of the final
         destination URL of the scanned link, after following all redirects.
@@ -106,7 +107,7 @@ class MalURL:
         """
         return self._get('domain')
 
-    def ip_address(self):
+    def ip_address(self) -> str:
         """
         Returns a string representing the IP address
         corresponding to the server of the domain name.
@@ -118,7 +119,7 @@ class MalURL:
         """
         return self._get('ip_address')
 
-    def server(self):
+    def server(self) -> str:
         """
         Returns a string representing server banner of the domain's IP address.
         For example: "nginx/1.16.0".  "N/A" is returned if unavailable.
@@ -130,7 +131,7 @@ class MalURL:
         s = self._get('server')
         return s if s else NA
 
-    def content_type(self):
+    def content_type(self) -> str:
         """
         Returns a string representing the MIME type of URL's content.
         For example "text/html; charset=UTF-8". 
@@ -143,7 +144,7 @@ class MalURL:
         ct = self._get('content_type')
         return ct if ct else NA
 
-    def risk_score(self):
+    def risk_score(self) -> int:
         """
         Returns an integer representing the The IPQS risk score which estimates
         the confidence level for malicious URL detection. Risk Scores 85+ are
@@ -157,7 +158,7 @@ class MalURL:
         risk_score = self._get('risk_score')
         return risk_score if risk_score != '' else DOES_NOT_EXIST
 
-    def status_code(self):
+    def status_code(self) -> int:
         """
         Returns an integer representing the HTTP Status Code of the URL's
         response. This value should be 200 for a valid website.
@@ -170,7 +171,7 @@ class MalURL:
         status = self._get('status_code')
         return status if status else 0
 
-    def page_size(self):
+    def page_size(self) -> int:
         """
         Returns an integer representing the Total number of bytes to download
         the URL's content. 0 is returned if URL is unreachable.
@@ -182,7 +183,7 @@ class MalURL:
         ps = self._get('page_size')
         return ps if ps else 0
 
-    def domain_rank(self):
+    def domain_rank(self) -> int:
         """
         Returns an integer representing the estimated popularity rank of
         website globally. Returns 0 if the domain is unranked or has low
@@ -195,7 +196,7 @@ class MalURL:
         rank = self._get('domain_rank')
         return rank if rank != '' else DOES_NOT_EXIST
 
-    def dns_valid(self):
+    def dns_valid(self) -> bool:
         """
         Returns boolean value indicating if the domain of the URL has valid
         DNS records.
@@ -206,7 +207,7 @@ class MalURL:
         """
         return bool(self._get('dns_valid'))
 
-    def suspicious(self):
+    def suspicious(self) -> bool:
         """
         Returns boolean value indicating if the URL is suspected of being
         malicious or used for phishing or abuse. Use in conjunction with
@@ -218,7 +219,7 @@ class MalURL:
         """
         return bool(self._get('suspicious'))
 
-    def phishing(self):
+    def phishing(self) -> bool:
         """
         Returns boolean value indicating if the URL is
         associated with malicious phishing behavior.
@@ -229,7 +230,7 @@ class MalURL:
         """
         return bool(self._get('phishing'))
 
-    def malware(self):
+    def malware(self) -> bool:
         """
         Returns boolean value indicating if the URL is
         associated with malware or viruses.
@@ -240,7 +241,7 @@ class MalURL:
         """
         return bool(self._get('malware'))
 
-    def parking(self):
+    def parking(self) -> bool:
         """
         Returns boolean value indicating if the URL is
         currently parked with a for sale notice.
@@ -251,7 +252,7 @@ class MalURL:
         """
         return bool(self._get('parking'))
 
-    def spamming(self):
+    def spamming(self) -> bool:
         """
         Returns boolean value indicating if the URL is
         associated with email SPAM or abusive email addresses.
@@ -262,7 +263,7 @@ class MalURL:
         """
         return bool(self._get('spamming'))
 
-    def adult(self):
+    def adult(self) -> bool:
         """
         Returns boolean value indicating if the URL or
         domain is hosting dating or adult content.
@@ -273,7 +274,7 @@ class MalURL:
         """
         return bool(self._get('adult'))
 
-    def category(self):
+    def category(self) -> str:
         """
         Returns a string representing the website classification and category
         related to the content and industry of the site. Over 70 categories
@@ -288,7 +289,7 @@ class MalURL:
         cat = self._get('category')
         return cat if cat else NA
 
-    def domain_age(self):
+    def domain_age(self) -> Dict[str, str]:
         """
         Returns a dictionary representing the domain age of the URL.
         If 'domain_age' is not available, then an empty dictionary
@@ -301,7 +302,7 @@ class MalURL:
         age = self._get('domain_age')
         return age if age else {}
 
-    def message(self):
+    def message(self) -> str:
         """
         Returns a generic status message, either success or
         some form of an error notice.
@@ -312,7 +313,7 @@ class MalURL:
         """
         return self._get('message')
 
-    def success(self):
+    def success(self) -> bool:
         """
         Returns a boolean indicating if the request to IPQS was successful.
         
@@ -322,7 +323,7 @@ class MalURL:
         """
         return self._get('success')
 
-    def request_id(self):
+    def request_id(self) -> str:
         """
         Returns a string representing the unique identifier for this request
         that can be used to lookup the request details or send a postback
@@ -334,7 +335,7 @@ class MalURL:
         """
         return self._get('request_id')
 
-    def errors(self):
+    def errors(self) -> List[str]:
         """
         Returns a list of strings representing the errors which
         occurred while attempting to process this request.
@@ -346,10 +347,10 @@ class MalURL:
         errs = self._get('errors')
         return errs if errs else []
 
-    def _get(self, key):
+    def _get(self, key: str) -> object:
         return self.results[key] if key in self.results else ''
 
-    def _is_valid_url(self, url):
+    def _is_valid_url(self, url: str) -> bool:
         is_valid = validate_url(url)
 
         if isinstance(is_valid, ValidationFailure):
@@ -357,7 +358,7 @@ class MalURL:
 
         return is_valid
 
-    def _no_results(self, status_code, message):
+    def _no_results(self, status_code: int, message: str) -> Dict[str, object]:
         return {
             "success": False,
             "message": message,

@@ -25,7 +25,7 @@ class TestMalURL(unittest.TestCase):
         url = 'google'
         self.malurl.fetch(url)
         test = self.malurl.results
-        expected= {
+        expected = {
             "success": False,
             "message": f"Invalid url {url}"
         }
