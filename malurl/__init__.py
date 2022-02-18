@@ -1,1 +1,1 @@
-from . import MalURL, DOES_NOT_EXIST, NA
+from .malurl import MalURL, DOES_NOT_EXIST, NA
