@@ -1,5 +1,4 @@
 # Copyright: 2022, Alexan Mardigian
-__version__ = "1.0.0"
 
 import json
 import requests

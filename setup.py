@@ -3,13 +3,14 @@ from setuptools import setup, find_packages
 VERSION = '1.0.0'
 DESCRIPTION = 'A Python 3 module that leverages the IP Quality Score API to scan links in real-time to detect suspicious URLs.'
 EXCLUDES = ('.gitignore', 'Sphinx-docs', 'tests')
+
 # Setting up
 setup(
     name="malurl",
     version=VERSION,
     author="Techno-Hwizrdry (Alexan Mardigian)",
     author_email="<alexan@expresspolygon.com>",
-    url='https://github.com/Techno-Hwizrdry/rainbowprint',
+    url='https://github.com/Techno-Hwizrdry/python-malurl',
     description=DESCRIPTION,
     long_description_content_type="text/markdown",
     long_description=DESCRIPTION,
