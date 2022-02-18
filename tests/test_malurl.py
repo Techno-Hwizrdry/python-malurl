@@ -7,6 +7,9 @@ import sys
 sys.path.insert(1, "../malurl")
 from malurl import MalURL, DOES_NOT_EXIST, NA
 
+OK = 200
+NOT_FOUND = 404
+
 class TestMalURL(unittest.TestCase):
     def setUp(self):
         config = ConfigParser()
@@ -37,15 +40,15 @@ class TestMalURL(unittest.TestCase):
 
     def test_MalURL_fetch_valid_key(self):
         self.malurl.fetch('google')
-        self.assertEqual(self.malurl._get('status_code'), 404)
+        self.assertEqual(self.malurl._get('status_code'), NOT_FOUND)
 
     def test_MalURL_fetch_valid_url(self):
         test = self.malurl.results
-        self.assertEqual(200, test['status_code'])
+        self.assertEqual(OK, test['status_code'])
 
     def test_MalURL_fetch_invalid_url(self):
         self.malurl.fetch('google')
-        self.assertEqual(404, self.malurl._get('status_code'))
+        self.assertEqual(NOT_FOUND, self.malurl._get('status_code'))
 
     def test_MalURL_unsafe(self):
         self.assertEqual(False, self.malurl.unsafe())
@@ -113,6 +116,16 @@ class TestMalURL(unittest.TestCase):
 
     def test_MalURL_errors(self):
         self.assertEqual([], self.malurl.errors())
+
+    def test_MalURL_strictness_less_than_zero(self):
+        m = MalURL(self.malurl.apikey, -9)
+        m.fetch('https://google.com')
+        self.assertEqual(self.malurl.status_code(), OK)
+
+    def test_MalURL_strictness_greater_than_two(self):
+        m = MalURL(self.malurl.apikey, 9)
+        m.fetch('https://google.com')
+        self.assertEqual(self.malurl.status_code(), OK)
 
 if __name__ == "__main__":
     unittest.main()
