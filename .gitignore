@@ -5,6 +5,8 @@ dist/
 lib/
 lib64/
 malurl.egg-info/
+Lib/
+Scripts/
 Sphinx-docs/
 malurlscan.conf
 pyvenv.cfg
