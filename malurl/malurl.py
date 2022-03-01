@@ -42,8 +42,8 @@ class MalURL:
             # If we have exceeded our API request quota, then modify
             # the results with a 402 (payment required) status_code.
             req = 'You have exceeded your request quota'
-            if not self.results['success'] and req in self.results['message']:
-                msg = self.results['message']
+            msg = self.message()
+            if not self.success() and req in msg:
                 self.results = self._no_results(402, msg)
         except requests.exceptions.ConnectionError:
             msg = "Failed to establish connection to IP Quality Score API."
