@@ -38,6 +38,13 @@ class MalURL:
         try:
             response = requests.get(api_url)
             self.results = json.loads(response.content.decode('utf-8'))
+            
+            # If we have exceeded our API request quota, then modify
+            # the results with a 402 (payment required) status_code.
+            req = 'You have exceeded your request quota'
+            if not self.results['success'] and req in self.results['message']:
+                msg = self.results['message']
+                self.results = self._no_results(402, msg)
         except requests.exceptions.ConnectionError:
             msg = "Failed to establish connection to IP Quality Score API."
             self.results = self._no_results(503, msg)

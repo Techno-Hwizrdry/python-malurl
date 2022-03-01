@@ -16,6 +16,13 @@ class TestMalURL(unittest.TestCase):
         cfg = config['malurlscan']
         self.malurl = MalURL(cfg['apikey'], cfg['strictness'])
         self.malurl.fetch('https://google.com')
+        self.is_within_api_request_quota()
+
+    def is_within_api_request_quota(self):
+        try:
+            assert self.malurl.status_code() != 402
+        except AssertionError:
+            self.skipTest(self.malurl.message())
 
     def test_MalURL_invalid_url(self):
         self.assertEqual(False, self.malurl._is_valid_url('google'))
@@ -25,7 +32,7 @@ class TestMalURL(unittest.TestCase):
 
     def test_MalURL_fetch_valid_url(self):
         test = self.malurl.results
-        self.assertEqual(OK, test['status_code'])
+        self.assertEqual(OK, test.get('status_code'))
 
     def test_MalURL_fetch_invalid_url(self):
         url = 'google'
