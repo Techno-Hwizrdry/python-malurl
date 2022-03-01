@@ -2,7 +2,6 @@
 
 import unittest
 from configparser import ConfigParser
-from urllib.parse import quote_plus
 import sys
 sys.path.insert(1, "../malurl")
 from malurl import MalURL, DOES_NOT_EXIST, NA
@@ -24,31 +23,20 @@ class TestMalURL(unittest.TestCase):
     def test_MalURL_valid_url(self):
         self.assertEqual(True, self.malurl._is_valid_url('http://google.com'))
 
+    def test_MalURL_fetch_valid_url(self):
+        test = self.malurl.results
+        self.assertEqual(OK, test['status_code'])
+
     def test_MalURL_fetch_invalid_url(self):
         url = 'google'
         self.malurl.fetch(url)
         test = self.malurl.results
         expected = {
             "success": False,
-            "message": f"Invalid url {url}"
+            "message": f"Invalid url {url}",
+            "status_code": 404
         }
         self.assertEqual(expected, test)
-
-    def test_MalURL__get_invalid_key(self):
-        self.malurl.fetch('google')
-        self.assertEqual(self.malurl._get('test'), '')
-
-    def test_MalURL_fetch_valid_key(self):
-        self.malurl.fetch('google')
-        self.assertEqual(self.malurl._get('status_code'), NOT_FOUND)
-
-    def test_MalURL_fetch_valid_url(self):
-        test = self.malurl.results
-        self.assertEqual(OK, test['status_code'])
-
-    def test_MalURL_fetch_invalid_url(self):
-        self.malurl.fetch('google')
-        self.assertEqual(NOT_FOUND, self.malurl._get('status_code'))
 
     def test_MalURL_unsafe(self):
         self.assertEqual(False, self.malurl.unsafe())

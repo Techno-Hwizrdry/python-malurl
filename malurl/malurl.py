@@ -28,7 +28,7 @@ class MalURL:
         url: string
         """
         if not self._is_valid_url(url):
-            self.results = self._no_results(404, "Invalid url {url}")
+            self.results = self._no_results(404, f"Invalid url {url}")
             return
 
         BASE = 'https://www.ipqualityscore.com/api/json/url'
@@ -92,7 +92,7 @@ class MalURL:
         ----------
         None.
         """
-        return bool(self._get('unsafe'))
+        return bool(self.results.get('unsafe'))
 
     def domain(self) -> str:
         """
@@ -104,7 +104,7 @@ class MalURL:
         ----------
         None.
         """
-        return self._get('domain')
+        return self.results.get('domain', '')
 
     def ip_address(self) -> str:
         """
@@ -116,7 +116,7 @@ class MalURL:
         ----------
         None.
         """
-        return self._get('ip_address')
+        return self.results.get('ip_address', '')
 
     def server(self) -> str:
         """
@@ -127,8 +127,7 @@ class MalURL:
         ----------
         None.
         """
-        s = self._get('server')
-        return s if s else NA
+        return self.results.get('server', NA)
 
     def content_type(self) -> str:
         """
@@ -140,8 +139,7 @@ class MalURL:
         ----------
         None.
         """
-        ct = self._get('content_type')
-        return ct if ct else NA
+        return self.results.get('content_type', NA)
 
     def risk_score(self) -> int:
         """
@@ -154,8 +152,7 @@ class MalURL:
         ----------
         None.
         """
-        risk_score = self._get('risk_score')
-        return risk_score if risk_score != '' else DOES_NOT_EXIST
+        return self.results.get('risk_score', DOES_NOT_EXIST)
 
     def status_code(self) -> int:
         """
@@ -167,8 +164,7 @@ class MalURL:
         ----------
         None.
         """
-        status = self._get('status_code')
-        return status if status else 0
+        return self.results.get('status_code', 0)
 
     def page_size(self) -> int:
         """
@@ -179,8 +175,7 @@ class MalURL:
         ----------
         None.
         """
-        ps = self._get('page_size')
-        return ps if ps else 0
+        return self.results.get('page_size', 0)
 
     def domain_rank(self) -> int:
         """
@@ -192,8 +187,7 @@ class MalURL:
         ----------
         None.
         """
-        rank = self._get('domain_rank')
-        return rank if rank != '' else DOES_NOT_EXIST
+        return self.results.get('domain_rank', DOES_NOT_EXIST)
 
     def dns_valid(self) -> bool:
         """
@@ -204,7 +198,7 @@ class MalURL:
         ----------
         None.
         """
-        return bool(self._get('dns_valid'))
+        return bool(self.results.get('dns_valid'))
 
     def suspicious(self) -> bool:
         """
@@ -216,7 +210,7 @@ class MalURL:
         ----------
         None.
         """
-        return bool(self._get('suspicious'))
+        return bool(self.results.get('suspicious'))
 
     def phishing(self) -> bool:
         """
@@ -227,7 +221,7 @@ class MalURL:
         ----------
         None.
         """
-        return bool(self._get('phishing'))
+        return bool(self.results.get('phishing'))
 
     def malware(self) -> bool:
         """
@@ -238,7 +232,7 @@ class MalURL:
         ----------
         None.
         """
-        return bool(self._get('malware'))
+        return bool(self.results.get('malware'))
 
     def parking(self) -> bool:
         """
@@ -249,7 +243,7 @@ class MalURL:
         ----------
         None.
         """
-        return bool(self._get('parking'))
+        return bool(self.results.get('parking'))
 
     def spamming(self) -> bool:
         """
@@ -260,7 +254,7 @@ class MalURL:
         ----------
         None.
         """
-        return bool(self._get('spamming'))
+        return bool(self.results.get('spamming'))
 
     def adult(self) -> bool:
         """
@@ -271,7 +265,7 @@ class MalURL:
         ----------
         None.
         """
-        return bool(self._get('adult'))
+        return bool(self.results.get('adult'))
 
     def category(self) -> str:
         """
@@ -285,8 +279,7 @@ class MalURL:
         ----------
         None.
         """
-        cat = self._get('category')
-        return cat if cat else NA
+        return self.results.get('category', NA)
 
     def domain_age(self) -> Dict[str, str]:
         """
@@ -298,8 +291,7 @@ class MalURL:
         ----------
         None.
         """
-        age = self._get('domain_age')
-        return age if age else {}
+        return self.results.get('domain_age', {})
 
     def message(self) -> str:
         """
@@ -310,7 +302,7 @@ class MalURL:
         ----------
         None.
         """
-        return self._get('message')
+        return self.results.get('message', '')
 
     def success(self) -> bool:
         """
@@ -320,7 +312,7 @@ class MalURL:
         ----------
         None.
         """
-        return self._get('success')
+        return bool(self.results.get('success'))
 
     def request_id(self) -> str:
         """
@@ -332,7 +324,7 @@ class MalURL:
         ----------
         None.
         """
-        return self._get('request_id')
+        return self.results.get('request_id', '')
 
     def errors(self) -> List[str]:
         """
@@ -343,11 +335,7 @@ class MalURL:
         ----------
         None.
         """
-        errs = self._get('errors')
-        return errs if errs else []
-
-    def _get(self, key: str) -> object:
-        return self.results[key] if key in self.results else ''
+        return self.results.get('errors', [])
 
     def _is_valid_url(self, url: str) -> bool:
         is_valid = validate_url(url)
