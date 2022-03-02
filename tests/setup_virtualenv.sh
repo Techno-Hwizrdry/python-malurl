@@ -1,10 +1,7 @@
 #!/bin/bash
 
-GITEMP=".gitignore_temp"
-
-mv .gitignore $GITEMP
 virtualenv .
-mv $GITEMP .gitignore
+rm .gitignore
 source bin/activate
 pip3 install -r requirements.txt
 deactivate
