@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-VERSION = '1.0.1'
+VERSION = '1.0.2'
 DESCRIPTION = 'A Python 3 module that leverages the IP Quality Score API to scan links in real-time to detect suspicious URLs.'
 EXCLUDES = ('.gitignore', 'Sphinx-docs', 'tests')
 
